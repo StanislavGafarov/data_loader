@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import re
 from tqdm import tqdm
+from normalizephonenumbers import NormalizePhoneNumbers
 from sqlalchemy import create_engine
 from email.utils import parseaddr
+from utils import write_to_db
 
 
 class DF_Preprocessing():
@@ -74,6 +76,8 @@ class DF_Preprocessing():
         df = df[(df.phone.notnull()) | (df.email.notnull())]
 
         # Cleaning phone
+        phone_normalizer = NormalizePhoneNumbers()
+        df['clean_phone'] = df.phone.apply(lambda x: phone_normalizer(str(x)))
         df['clean_phone'] = df['clean_phone'].apply(self.cleaning_phone)
 
         # Cleaning email
@@ -85,7 +89,8 @@ class DF_Preprocessing():
     def __call__(self):
         raw_df_dict = {}
         for key in tqdm(self.db_description.keys()):
-            df = pd.read_sql_query(self.db_description[key]['query'], self.engines[key])
+            df = pd.read_sql_query(self.db_description[key]['query'].replace("$", '"'), self.engines[key])
             df = self.cleaning(df, key)
             raw_df_dict.update({key: df})
-        return raw_df_dict
+            write_to_db(df,
+                        destination=self.db_description[key]['destination'])
