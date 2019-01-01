@@ -1,0 +1,29 @@
+{
+  "DB_1": {
+    "user": "user_1",
+    "pass": "password_1",
+    "db_name": "postgresql",
+    "db_ip_port": "192.168.148.111:5432/",
+    "scheme_name": "scheme_1",
+    "query": "SELECT id as user_id, mail as email, phone FROM user_table where phone is not null or mail is not null",
+    "destination": "local_db.user_1"
+  },
+  "DB_2": {
+    "user": "user_2",
+    "pass": "password_2",
+    "db_name": "mysql",
+    "db_ip_port": "192.168.148.112:3306/",
+    "scheme_name": "scheme_2",
+    "query": "SELECT id as user_id, mail as email, phone FROM user_table_2 where phone is not null or mail is not null",
+    "destination": "local_db.user_2"
+  },
+  "DB_N": {
+    "user": "user_n",
+    "pass": "password_n",
+    "db_name": "mysql",
+    "db_ip_port": "192.168.148.113:3307/",
+    "scheme_name": "scheme_n",
+    "query": "SELECT id as user_id, mail as email, phone FROM user_table_n where phone is not null or mail is not null",
+    "destination": "local_db.user_n"
+  }
+}
