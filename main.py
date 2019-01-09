@@ -9,6 +9,8 @@ if __name__ == "__main__":
     # print('Saving DataFrames')
     # save_df_dict(raw_df_dict)
     # save_df_dict(df_dict, suffix='_clean')
+    # TODO: refactor/add new sources
+    # TODO: Cover code with unit tests
     # TODO: Adding multiprocessing
     print("Done")
 

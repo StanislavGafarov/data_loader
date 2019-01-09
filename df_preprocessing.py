@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import re
 from tqdm import tqdm
 from normalizephonenumbers import NormalizePhoneNumbers
@@ -21,44 +20,10 @@ class DF_Preprocessing():
                                                        db_description[key]['db_name'], db_description[key]['db_ip_port']
                                                        , db_description[key]['scheme_name'])
 
-
     def create_connection(self, User, Passw, db_name, db_ip, scheme_name):
         con_description = db_name + '://' + User + ':' + Passw + '@' + db_ip + scheme_name
         connection = create_engine(con_description)
         return connection
-
-
-    def cleaning_phone(self, strr: str):
-        if isinstance(strr, str):
-            if re.findall('[A-Za-zа-яА-Я_=\+\.\-\(\)\*/\?\s]', strr.strip()):
-                if len(strr) > 25:
-                    ret = 12345
-                elif '_' in strr:
-                    ret = int(strr.split('_')[0])
-                elif 'del' in strr:
-                    ret = int(strr.split('(')[0])
-                elif '+' in strr and len(strr) > 2:
-                    ret = int(''.join(re.findall('\d', strr)))
-                else:
-                    ret = 12345
-            elif len(strr) < 1:
-                ret = 12345
-            else:
-                ret = int(strr.strip())
-
-            ret = 12345 if ret.bit_length() > 64 else ret
-
-
-        elif isinstance(strr, int):
-            ret = int(strr)
-        elif isinstance(strr, float):
-            if np.isnan(strr):
-                ret = 123456
-            else:
-                ret = int(strr)
-        else:
-            ret = 1234
-        return ret
 
     def cleaning_email(self, strr: str):
         if strr is None:
@@ -70,7 +35,6 @@ class DF_Preprocessing():
                 ret = None
         return ret
 
-
     def cleaning(self, df):
         # Filtering
         df = df[(df.phone.notnull()) | (df.email.notnull())]
@@ -78,13 +42,11 @@ class DF_Preprocessing():
         # Cleaning phone
         phone_normalizer = NormalizePhoneNumbers()
         df['clean_phone'] = df.phone.apply(lambda x: phone_normalizer(str(x)))
-        df['clean_phone'] = df['clean_phone'].apply(self.cleaning_phone)
 
         # Cleaning email
         df['clean_email'] = df.email.apply(self.cleaning_email)
 
         return df
-
 
     def __call__(self):
         raw_df_dict = {}

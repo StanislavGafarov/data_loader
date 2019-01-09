@@ -21,7 +21,7 @@ class NormalizePhoneNumbers(object):
         regex_phone_number_template = '{}(?:{}){}'.format(boundary_start, regex_phone_number_template, boundary_end)
 
         self.regex_phone_number = re.compile(regex_phone_number_template)
-        self.plus_regex = re.compile(r"(\+ *)(\+7\d{10})")
+        self.plus_regex = re.compile(r"(\+7 *)(\+7\d{10})")
         
     def flatten(self, lst: list) -> list:
         """
